@@ -1,15 +1,25 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: Show Secrets
 
-# Controls when the workflow will run
 on:
   workflow_dispatch:
+    inputs:
+      echo:
+        description: 'Test echo'
+        required: true
+        type: string
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  repository_dispatch:
+    types: [echo]
+
+permissions:
+  contents: read
+
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
+
     runs-on: ubuntu-latest
 
     steps:
@@ -17,5 +27,15 @@ jobs:
     - uses: oNaiPs/secrets-to-env-action@v1
       with:
         secrets: ${{ toJSON(secrets) }}
-    - run: |
-        echo "Value of SECRET1: $SECRET1"
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        cache: "pip"
+    - name: Install dependencies
+      run: |
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
+    - name: Run Sample
+      run: |
+        python echo-env.py
