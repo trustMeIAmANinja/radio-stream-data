@@ -1,0 +1,43 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Show Secrets
+
+on:
+  workflow_dispatch:
+    inputs:
+      echo:
+        description: 'Test echo'
+        required: true
+        type: string
+
+  repository_dispatch:
+    types: [echo]
+
+permissions:
+  contents: read
+
+jobs:
+  process:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: oNaiPs/secrets-to-env-action@v1
+      with:
+        secrets: ${{ toJSON(secrets) }}
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        cache: "pip"
+    - name: Install dependencies
+      run: |
+        sudo apt-get install libsqlcipher-dev
+        python -m pip install sqlcipher3-binary requests
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
+    - name: Run Extractor
+      run: |
+        python extract_stream_url.py

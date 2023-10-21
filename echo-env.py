@@ -1,7 +1,11 @@
 
 import os
 
+def fstr(template):
+    return eval(f"f'{template}'")
+
 location = 'sample'
 
-print(os.environ['SECRET1'])
+st = os.environ['SECRET1']
+print(fstr(st))
 
