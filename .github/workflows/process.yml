@@ -5,17 +5,12 @@ name: Process Stream
 
 on:
   workflow_dispatch:
-    inputs:
-      echo:
-        description: 'Test echo'
-        required: true
-        type: string
 
   repository_dispatch:
     types: [echo]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   process:
@@ -41,3 +36,10 @@ jobs:
     - name: Run Extractor
       run: |
         python extract_stream_url.py
+    - name: Commit Updated DB
+      run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Commit Updated Db"
+          git push

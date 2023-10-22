@@ -46,7 +46,7 @@ rows = cur.fetchmany(size=10)
 
 for row in rows:
     station = Station(row)
-    print(station.id)
+    print(row)
     stream_url = process_url(station)
     station.stream_url = stream_url
     station.update_db(cur)
