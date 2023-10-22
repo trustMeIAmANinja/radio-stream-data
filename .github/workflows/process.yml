@@ -32,7 +32,9 @@ jobs:
         sudo apt-get install libsqlcipher-dev
         python -m pip install sqlcipher3-binary requests
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    
+    - name: Log External IP
+      run: |
+        python echoip.py
     - name: Run Extractor
       run: |
         python extract_stream_url.py

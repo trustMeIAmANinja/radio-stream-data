@@ -21,7 +21,6 @@ class Station:
     def update_db(self, cur):
         cur.execute(f"update stations set stream_url='{self.stream_url}' where id='{self.id}'")
 
-
 def process_url(station):
 
     station_id = station.id
@@ -41,8 +40,8 @@ db = sqlite.connect("radio-data.db")
 db.execute(f'pragma key="{DB_ENCRYPTION_KEY}"')
 
 cur = db.cursor()
-cur.execute("select * from stations where stream_url='NONE' LIMIT 10")
-rows = cur.fetchmany(size=10)
+cur.execute("select * from stations where stream_url='NONE' LIMIT 100")
+rows = cur.fetchmany(size=100)
 
 for row in rows:
     station = Station(row)
