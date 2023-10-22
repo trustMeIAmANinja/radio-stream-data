@@ -40,8 +40,8 @@ db = sqlite.connect("radio-data.db")
 db.execute(f'pragma key="{DB_ENCRYPTION_KEY}"')
 
 cur = db.cursor()
-cur.execute("select * from stations where stream_url='NONE' LIMIT 100")
-rows = cur.fetchmany(size=100)
+cur.execute("select * from stations where stream_url='NONE' LIMIT 250")
+rows = cur.fetchmany(size=250)
 
 for row in rows:
     station = Station(row)
@@ -50,7 +50,7 @@ for row in rows:
     station.stream_url = stream_url
     station.update_db(cur)
     sleep_interval = random.randint(5, 10)
-    print(f"Sleeping {sleep_interval} to prevent DDOSing")
+    print(f"Sleeping {sleep_interval} seconds to prevent DDOSing")
     time.sleep(sleep_interval)
 
 db.commit()
