@@ -19,7 +19,7 @@ class Station:
         self.stream_url = row[4]
 
     def update_db(self, cur):
-        cur.execute(f"update stations set stream_url='{self.stream_url}' where id='{self.id}'")
+        cur.execute(f"update stations set stream_url=? where id=?", (self.stream_url, self.id))
 
 def process_url(station):
 
